@@ -1,0 +1,27 @@
+<html>
+<head>
+<title><?php echo htmlentities ($this->title) ?></title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<style>
+body 
+{ 
+    background-color: #000; 
+    color: #ff0; 
+    font-family: "Lucida Console", Monaco, "Courier New", Courier, monospace; 
+    font-size: 90%; 
+}
+.console
+{
+  white-space: pre;
+  display: block;
+}
+a:link {color:#ff0;}
+a:visited {color:#ff0;}
+a:hover {color:#ff0;}
+a:active {color:#ff0;}
+</style>
+</head>
+<body>
+<div class="console"><?php echo $this->output; ?></div>
+</body>
+</html>

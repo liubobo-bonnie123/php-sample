@@ -1,0 +1,300 @@
+body
+{
+    margin: 0;
+    padding: 0;
+    font-family: 'Lucida Grande', Verdana, Arial, sans-serif;
+}
+
+a
+{
+    cursor: pointer;
+}
+
+h1 a 
+{
+    text-decoration: none;
+    color: #3b5998;
+}
+
+h1 a:hover 
+{
+    text-decoration: underline;
+}
+
+a.boxlink:link {color:#FFF; text-decoration:none; }
+a.boxlink:visited {color:#FFF; text-decoration:none; }
+a.boxlink:hover {text-decoration:underline; font-weight: bold; color: #ffff00; }
+a.boxlink:active {color:#FFF; text-decoration:none; }
+
+.playgigit
+{
+}
+
+.smallish
+{
+    font-size: 80%;
+}
+
+.admin
+{
+    padding: 5px;
+}
+
+
+.box
+{
+    text-align: center; 
+    margin: 0 auto;
+    padding: 20px;
+    width: 760px;
+    border: 1px solid #6797CF; 
+    background: #6797CF; 
+    -moz-border-radius: 8px; 
+    -webkit-border-radius: 8px; 
+    border-radius: 8px; 
+    -moz-box-shadow: inset 0 0 0 1px #6797CF; 
+    -webkit-box-shadow: inset 0 0 0 1px #6797CF; 
+    box-shadow: inset 0 0 0 1px #6797CF; 
+    color: #fff;
+}
+
+.swfcontainer
+{
+    width: 760px;
+    height: 620px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -380px;
+    margin-top: -310px;
+    background-color: white;
+}
+
+/*
+ * Banner Ad and Top Nav
+ */
+
+#bannerad
+{
+    width: 760px;
+    height: 160px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top:10px;
+    text-align: center;
+    margin-bottom: -1px;
+}
+
+#bannerad_nav
+{
+    width: 525px;
+    height: 20px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: -1px;
+    text-align: center;
+}
+
+#bannerad_nav ul
+{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: block;
+
+}
+
+#bannerad_nav ul li
+{
+    display: inline;
+    margin: 0;  
+    padding: 0; 
+}
+
+#bannerad_nav ul li a
+{
+    text-decoration: none;
+    border: 0;
+    margin: 0;
+}
+
+#bannerad_nav ul li a img
+{
+    text-decoration: none;
+    border: 0;
+    width: 75px;
+    height:19px;
+    margin-right: -3px;
+    margin-left: -3px;
+    padding: 0;
+}
+
+
+#bannerad_bg
+{
+    width: 760px;
+    height: 140px;
+    background-image: url('../assets/fb/RT_0000_RT_header.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #FFF;
+    margin: 0;
+    padding: 0;
+}
+
+#bannerad_bg .adbox a img
+{
+    text-align: center; 
+    margin: 0 auto;
+    padding: 2px;
+    color: #fff;
+    padding-top: 30px;
+    width: 620px;
+    height: 80px;
+}
+
+#hub
+{
+}
+
+#shutdown
+{
+    width: 100%;
+    height: 100%;
+    text-align: center; 
+    margin: 0 auto;
+    position: absolute; 
+    top: 0px;
+    left: 0px;
+    border: 0px solid #000;
+    display: none;
+}
+
+/*
+ * Gifting 
+ */
+
+#gifts
+{
+    width: 100%;
+    height: 100%;
+    text-align: center; 
+    margin: 0 auto;
+    position: absolute; 
+    top: 0px;
+    left: 0px;
+    border: 0px solid #000;
+    display: none;
+}
+
+#gift_container
+{
+    width: 100%;
+    text-align: left;
+}
+
+#gifts.h1
+{
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: baseline;
+}
+
+#gift_none
+{
+    font-size: 150%;
+    display: none;
+    margin: 20px;
+    padding: 20px;
+}
+
+#gift_list
+{
+    display: none;
+}
+
+.gift_item_name
+{
+    font-size: 90%;
+    color: #404040;
+    text-align: center;
+}
+
+.gift_facebook_name
+{
+    font-size: 80%;
+}
+
+/* */
+
+.gift_grid_wrapper
+{
+    text-align: center; 
+    margin: 0 auto;
+    width: 753px;
+}
+
+.gift_grid
+{
+    text-align: center; 
+    margin: 0 auto;
+    display: table; 
+    width: 750px;
+}
+
+.gift_grid_square
+{
+    width:250px;
+    height:250px;
+    float:left;
+}
+
+.gift_image_grid_holder
+{
+    min-height: 96px;
+}
+
+/*
+ * Scanner and Footer 
+ */
+
+ #footer
+ {
+    width: 760px;
+    height: 85px;
+    margin-top: 0px;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+ }
+
+  #footer
+ {
+    width: 760px;
+    height: 90px;
+    margin-top: 0px;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+ }
+ #scanner a img
+ {
+    border: 0;
+    margin-top: 0;
+    margin-bottom: 5px;
+    text-decoration: none;
+    width: 760px;
+    height: 60px;
+ }
+ #like
+ {
+    margin-top: 0;
+    margin-left: -155px;
+    width: 760px;
+    float: left;
+ }
+
+

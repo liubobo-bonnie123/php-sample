@@ -1,0 +1,87 @@
+body
+{
+    margin: 0;
+    padding: 0;
+    font-family: Myriad Pro, Trebuchet MS, Arial, Sans-Serif;
+}
+
+#container
+{
+    text-align: center; 
+    margin: 0 auto;
+    width: 760px;
+    background-image: url('../assets/fb/ScannerDownloadBKG.png');
+    height: 310px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: #FFF;
+}
+
+#copy 
+{
+    font-family: Myriad Pro, Trebuchet MS, Arial, Sans-Serif;
+    font-size: 1em;
+    width: 90%;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 15px;
+}
+
+#copy h1
+{
+    font-size: 2.1em;
+    font-weight: bold;
+    text-align: center;
+    letter-spacing: .03em;
+    color: #FFF;
+    text-shadow: 5px 1px 1px #000;
+    margin-bottom: -10px;
+    padding-top: 40px;
+}
+#copy p
+{
+    font-size: 1em;
+    text-align: center;
+    color: #FFF;
+    font-weight: 200;
+    margin-bottom: -3px;
+}
+#copy ol
+{
+    margin-top: 10px;
+    margin-bottom: -3px;
+}
+#copy ol li
+{
+    font-size: 1em;
+    text-align: left;
+    color: #fbb040;
+    width: 45%;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+#copy h2
+{
+    font-size: 1.7em;
+    text-align: center;
+    color: #FFF;
+    font-weight: 400;
+    margin-top: 12px;
+    margin-bottom: -10px;
+    letter-spacing: .03em;
+}
+#copy h2 a
+{
+    color: #ed1c24;
+    font-weight: 400;
+    text-decoration: underline;
+}
+#copy p a
+{
+    color: #ed1c24;
+    font-weight: bold;
+    text-decoration: underline;
+    margin-top: -5px;
+}
+

@@ -1,0 +1,715 @@
+<?php
+function main ($context)
+{
+    if (strstr($_SERVER['HTTP_USER_AGENT'],'Mobile'))
+    {
+        $url=$context->app->config->mobile('url');
+        echo "<script type='text/javascript'>top.location.href ='".$url."';</script>";
+        return;
+    }
+    $cdn = $context->app->config->web('cdn');
+?>
+<html xmlns:fb="http://ogp.me/ns/fb#">
+<head>
+<meta name="Generated" content="<?php echo date(DATE_RFC2822) ?>">
+<meta name="D" content="D is for lots of things"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script type="text/javascript" src="<?php echo $cdn ?>/swfobject/swfobject.js"></script>
+
+<script type="text/javascript">
+var gift_testing = false;
+var mute = 1;
+var api = '<?php echo $context->app->config->api ("url"); ?>';
+var cdn = '<?php echo $context->app->config->web ("cdn"); ?>';
+var gifted = [];
+var token = '';
+
+jQuery.fn.verticalAlign = function () { return this.css("margin-top",($(this).parent().height() - $(this).height())/2 + 'px' ) };
+
+</script>
+
+<script type="text/javascript" src="<?php echo $cdn ?>/js/toggler.js?<?php echo time() ?>"></script>
+
+<link rel="stylesheet" href="<?php echo $cdn ?>/3rd/td/tdfriendselector.css" />
+<script type="text/javascript" src="<?php echo $cdn ?>/3rd/td/tdfriendselector.js?<?php echo time() ?>"></script>
+<script type="text/javascript" src="<?php echo $cdn ?>/js/gifting.js?<?php echo time() ?>"></script>
+
+<style type="text/css" media="screen">@import "<?php echo $cdn ?>/css/facebook_canvas.css?<?php echo time() ?>";</style>
+<title><?php echo $context->escape($context->app->config->facebook('title')) ?></title>
+</head>
+<body>
+<div id="fb-root"></div>
+<script type="text/javascript">
+function gifts()
+{
+    toggler.hideall();
+    toggler.show ('gifts');
+    gifting.render (gifted);
+    return false;
+}
+
+function game()
+{
+    toggler.hideall();
+    toggler.show ('footer');
+    toggler.show ('scanner_dev');
+    toggler.show ('playgigit');
+    toggler.show ('bannerad');
+    return false;
+}
+
+function get_string_key (string_key)
+{
+    var swf = swfobject.getObjectById ("playgigit");
+    var translated = swf.serverWantsLocalizedString (string_key);
+    return translated;
+}
+
+function __remove_request (request_id, uri)
+{
+    // decrement gift count label
+    var gc = $("#giftcount").html();
+    gc--;
+    $("#giftcount").html (gc);
+    
+    var entropy = new Date().getTime();
+    var url = api + uri + encodeURIComponent ("" + request_id) + '?token=' + encodeURIComponent (token) + '&' + entropy;
+
+    $.ajax
+    (
+        {
+            url: url
+        }
+    ).done
+    (
+        function (reply)
+        {
+        }
+    );
+    
+/*
+    FB.api
+    (
+        request_id, 
+        'delete', 
+        function (response) 
+        {
+            console.log ("Removed request #" + request_id + " from Facebook");
+            console.log (response);
+        }
+    );
+*/
+}
+
+function gifting_close()
+{
+    game();
+    fetch_gift_count();
+}
+
+function fetch_gift_count()
+{
+    $.ajax
+    (
+        {
+            url: api + '/gifts/me?token=' + encodeURIComponent (token)
+        }
+    ).done
+    (
+        function (reply)
+        {
+            gifted = reply['reqs'];
+            $("#giftcount").html (gifted.length);
+        }
+    );
+}
+
+$(document).ready
+(
+    function() 
+    {
+        $.ajaxSetup({ cache: true });
+
+        gifting.init
+        (
+            {
+                api_url: api,
+                cdn_url: cdn,
+                token: token,
+                items_url: cdn + "/data/gifting.json",
+                elements: 
+                {
+                    list_element: "gift_list"
+                },
+                callbacks:
+                {
+                    complete: gifting_close,
+                    accept: function (request_id)
+                    {
+                        __remove_request (request_id, '/gifts/recv/');
+                    },
+                    remove: function (request_id)
+                    {
+                        __remove_request (request_id, '/gifts/rm/');
+                    },
+                    i18n: get_string_key
+                }
+            }
+        );
+        
+        $.getScript
+        (
+            '//connect.facebook.net/en_UK/all.js', 
+            function()
+            {
+                FB.init
+                (
+                    {
+                        appId: '<?echo $context->app->config->facebook ('app_id') ?>',
+                        status: true,
+                        cookie: true,
+                        frictionlessRequests : true,
+                        xfbml: true
+                    }
+                );     
+                $('#loginbutton,#feedbutton').removeAttr('disabled');
+                FB.getLoginStatus(updateStatusCallback);
+            }
+        );
+
+        $("#bannerad_nav ul li a img, #footer #scanner a img").hover(function(){
+            $(this).attr("src", function(index, attr){
+                return attr.replace(".png", "_hover.png");
+            });
+        }, function(){
+            $(this).attr("src", function(index, attr){
+                return attr.replace("_hover.png", ".png");
+            });
+        });
+    }
+    		
+<?php
+		$adv = new \PlayGigIt\Ad\Manager ();
+		$advinfo = json_decode($adv->LoadAdInfo(),true);	
+?>
+
+);
+
+function shareFB()
+{	
+	var result = false;
+	var obj= api + "/hub/graph";
+	var fb_namespace = '<?php echo $context->app->config->facebook ('facebook_namespace'); ?>';
+    $.ajax
+    (
+        {
+            url: 'https://graph.facebook.com/' + user_id + '/permissions?access_token=' + '<?php echo $context->app->config->facebook('app_access_token') ?>'
+        }
+    ).done
+    (
+        function (reply)
+        {
+			if (reply.data[0].publish_actions==1)
+			{
+				var obj= api + "/hub/share/";
+				FB.api
+				(
+					'me/' + fb_namespace + ':create',
+					'post',
+					{
+						object: obj
+					},
+					function callback(response) 
+					{
+						var flag=$.isNumeric(response.id);
+						if (flag==true) 
+						{
+							result=true;
+						} 
+						else 
+						{
+						}
+					}
+				);	
+			}
+			else
+			{
+				var attachment = 
+				{
+					method: 'oauth',
+					scope: 'publish_actions',
+					redirect_uri: '<?php echo $context->app->config->facebook ('facebook_callback_url') ?>',
+					link: '<?php echo $context->app->config->facebook ('facebook_callback_url') ?>',
+					client_id: <?php echo $context->app->config->facebook('app_id') ?>,
+					access_token: '<?php echo $context->app->config->facebook('app_access_token') ?>',
+					response_type: "code"
+				};
+				var js_callback = function(response) 
+				{
+					if (response) 
+					{
+						var obj= api + "/hub/share/";
+						FB.api
+						(
+							'me/' + fb_namespace + ':create',
+							'post',
+							{
+								object: obj
+							},
+							function callback(response) 
+							{
+								var flag=$.isNumeric(response.id);
+								if (flag==true) 
+								{
+									result=true;
+								} 
+								else 
+								{
+								}
+							}
+						);	
+					} 
+					else 
+					{
+						alert('Post was not published.');
+					}	
+				};   
+				FB.ui(attachment, js_callback);
+			}	
+        }
+    );	
+}	
+
+function indexInvite()
+{
+    FB.ui
+    (
+        {
+            method: 'apprequests',
+            message: get_string_key ("$facebookShareMessage")
+        }, 
+        function (response) 
+        {
+            if (response) 
+            {
+                $.ajax
+                (
+                    {
+                        url: api + '/analytics/log/invite/sent?token=' + encodeURIComponent (token),
+                        type: "POST",
+                        data: JSON.stringify({ request: response.request, to: response.to }),
+                        processData: false
+                    }
+                ).done
+                (
+                    function (reply)
+                    {
+                    }
+                );
+            }
+            else 
+            {
+                alert('Post was not published.');
+            }	
+        }
+    );
+    return false;
+}
+
+function updateStatusCallback()
+{   
+    FB.getLoginStatus
+    (
+        function(response) 
+        {
+            if (response.status === 'connected') 
+            {
+                var uid = response.authResponse.userID;
+                var accessToken = response.authResponse.accessToken;
+                return load_user (uid, accessToken);
+            }
+            var auth_url = "https://www.facebook.com/dialog/oauth" + 
+                "?client_id=<?php echo $context->app->config->facebook('app_id') ?>" + 
+                "&redirect_uri=<?php echo $context->app->config->facebook ('facebook_callback_url') ?>";
+            top.location.href = auth_url;
+        }
+    );
+}
+
+function shutdown (code)
+{
+    $.ajax
+    (
+        {
+            url: api + '/analytics/log/hub/shutdown?token=' + encodeURIComponent (token),
+            type: "POST",
+            data: JSON.stringify({ code: code }),
+            processData: false
+        }
+    ).done
+    (
+        function (reply)
+        {
+        }
+    );
+
+    switch (code)
+    {
+        case '409':
+            console.log ("Player Collision");
+            $("#shutdown").html (get_string_key ("$playerKickCollision"));
+            break;
+
+        case '503':
+            console.log ("Maintenance Mode");
+            $("#shutdown").html (get_string_key ("$playerKickMaintenanceMode"));
+            break;
+        
+        case '505':
+            console.log ("Force Upgrade");
+            $("#shutdown").html (get_string_key ("$playerKickVersion"));
+            break;
+
+        default:
+            console.log ("Received unknown shutdown code from client: " + code);
+            $("#shutdown").html (get_string_key ("$playerKickUnexpectedError"));
+            break;
+    }
+
+    $("#shutdown").verticalAlign();
+    toggler.hideall();
+    toggler.show ('shutdown');
+    $("#playgigit").remove();
+}
+
+function getLocalCurrency()
+{
+    var swf = swfobject.getObjectById ("playgigit");
+    var datas = 
+    FB.api(
+        '/me/?fields=currency',
+        function(data)
+        {
+            if (!data || data.error)
+            {
+                swf.getLocalCurrencyFailed();
+            }
+            else
+            {
+                swf.getLocalCurrencySuccess(data);
+            }
+        }
+    );
+}
+
+function buyTickets (item_id)
+{           
+    var obj = 
+    {
+          method: 'pay',
+          action: 'purchaseitem',
+          product: api + '/hub/tickets/' + item_id,
+          quantity: '1',
+    };
+                    
+    var js_callback = function(data) 
+    {
+        var swf = swfobject.getObjectById ("playgigit");
+
+        if ( data['status'] == 'initiated')
+        {
+            swf.onTicketPurchaseInitiated();
+        }
+        else if ( data['status'] == 'failed')
+        {
+            swf.onTicketPurchaseFailed();
+        }
+        else if ( data['status'] == 'completed')
+        {
+            if (data['payment_id'])
+            {
+                //alert client
+                swf.onTicketPurchaseSuccess (data['payment_id']);
+            }
+            else
+            {
+                swf.onTicketPurchaseFailed();
+            }
+        }
+        
+    };     
+    FB.ui(obj, js_callback);
+    return false;
+}
+
+function on_game_loaded (e)
+{
+}
+
+function haveFun (fql)
+{
+    FB.api
+    (
+        "/fql?q=" + encodeURIComponent (fql),
+        function(response) 
+        {
+            var swf = swfobject.getObjectById ("playgigit");
+            swf.onFunComplete (response);
+        }
+    );
+}
+
+var user_info = {};
+
+function get_user_info()
+{
+    return user_info;
+}
+
+function load_user (uid, accessToken)
+{
+    FB.api
+    (
+        '/me', 
+        function (response) 
+        {
+            user_info = response;
+            go (uid, accessToken);
+        }
+    );
+}
+
+function go (uid, accessToken)
+{
+<?php
+    try
+    {
+        $facebook = new Facebook
+        (
+            array
+            (
+                'appId' => $context->app->config->facebook('app_id'),
+                'secret' => $context->app->config->facebook('app_secret')
+            )
+        );
+
+        if (! $facebook)
+        {
+            return "Can't initialize Facebook";
+        }
+
+        list ($encoded_sig, $payload) = explode('.', $context->signed_request, 2);
+        $data = json_decode(base64_decode(strtr($payload, '-_', '+/')), true);
+    }
+    catch (Exception $e)
+    {
+        \PlayGigIt\Logger\Log::fatal ($e->getMessage());
+        echo "<h1>NOPE</h1>";
+        return;
+    }
+
+    if (! isset ($data['user_id']))
+    {
+        echo "}</script>\n";
+        return;
+    }
+
+    $token = \PlayGigIt\Auth\Token::obfuscate ($data["user_id"]);
+    $spaceDict = $context->app->getSpaceDict();
+    $musicDict = new \PlayGigIt\Model\Composite\Music ($spaceDict);
+	
+    try
+    {
+        $lastScanDate = $musicDict->getPlayerUpdateDate ($data['user_id']);
+    }
+    catch (Exception $e)
+    {
+        \PlayGigIt\Logger\Log::warning ("Unexpected error fetching getPlayerUpdateDate for {$data['user_id']}:\n" . $e->getMessage());
+        $lastScanDate = 0;
+    }
+
+    echo <<<FIN
+    token = '{$token}';
+	user_id = '{$data["user_id"]}';
+
+    fetch_gift_count();
+
+    if (gift_testing)
+    {
+        gifts();
+    }
+    else
+    {
+        swfobject.embedSWF
+        (
+            "{$cdn}/site/Hub.swf?" + (new Date).getTime(), 
+            "hub", 
+            "100%", 
+            "90%", 
+            "11.6.0",
+            "{$cdn}/swfobject/expressInstall.swf", 
+            {
+                token: "{$token}",
+                fb: uid,
+                cdn: "{$cdn}",
+                api: "{$context->app->config->api ("url")}",
+                locale: "{$data["user"]["locale"]}",
+                country: "{$data["user"]["country"]}",
+                mute: mute
+            },
+            {
+                "allowScriptAccess": "always",
+                "allowFullScreen": "true",
+                "quality": "best",
+                "wmode": "opaque"
+            },
+            {
+                id: "playgigit",
+                name: "playgigit"
+            },
+            on_game_loaded
+        );
+    } 
+
+    $('#buildinfo').load('{$context->app->config->api ("url")}/build');
+    toggler.add_html_element ('bannerad');
+    toggler.add_html_element ('footer');
+    toggler.add_html_element ('scanner_dev');
+    toggler.add_html_element ('gifts');
+    toggler.add_html_element ('shutdown');
+    toggler.add_flash_element ('playgigit');
+}
+</script>
+FIN;
+?>
+
+<div id="shutdown">
+</div>
+
+<?php
+if (isset ($advinfo['link']) && isset ($advinfo['image']))
+{
+?>
+<div id="bannerad">
+    <div id="bannerad_nav">
+        <ul>
+            <li><a href="#" onClick="gifting_close()"><img src="<?php echo $cdn ?>/assets/fb/RT_play.png" alt="Play" /></a></li>
+            <li><a href="#" onClick="gifts()"><img src="<?php echo $cdn ?>/assets/fb/RT_gift.png" alt="Gifts" /></a></li>
+            <li><a href="#" onClick="indexInvite()"><img src="<?php echo $cdn ?>/assets/fb/RT_invite.png" alt="Invite" /></a></li>
+            <li><a href="https://www.facebook.com/playgigit" target="_blank"><img src="<?php echo $cdn ?>/assets/fb/RT_comm.png" alt="Community" /></a></li>
+            <li><a href="#" onClick="buyTickets('1928558756')"><img src="<?php echo $cdn ?>/assets/fb/RT_cashtix.png" alt="Add Cash and Tix" /></a></li>
+            <li><a href="#"><img src="<?php echo $cdn ?>/assets/fb/RT_promo.png" alt="Promotions" /></a></li>
+            <li><a href="https://support.playgigit.com" target="_blank"><img src="<?php echo $cdn ?>/assets/fb/RT_help.png" alt="Help" /></a></li>
+        </ul>
+    </div>
+    <div id= "bannerad_bg">
+        <div class="adbox">
+            <a target="_blank" href="<?php echo $advinfo['link'] ?>"><img src="<?php echo $advinfo['image'] ?>" ></a>
+        </div>
+    </div>
+</div>
+<?php
+}
+?>
+
+
+
+
+
+
+
+<div id="gifts">
+    <span id="gift_header">
+        <h1>GIFTING HUB</h1>
+        <a href="#" onClick="gifting_close()">BACK TO GAME</a>
+        <br/>
+        <br/>
+    </span>
+    <div id="gift_container">
+        <div id="TDFriendSelector">
+                <div class="TDFriendSelector_dialog">
+                    <a href="#" id="TDFriendSelector_buttonClose">x</a>
+                    <div class="TDFriendSelector_form">
+                        <div class="TDFriendSelector_header">
+                            <p>Select your friends</p>
+                        </div>
+                        <div class="TDFriendSelector_content">
+                            <p>Then you can invite them to join you in the app.</p>
+                            <div class="TDFriendSelector_searchContainer TDFriendSelector_clearfix">
+                                <div class="TDFriendSelector_selectedCountContainer"><span class="TDFriendSelector_selectedCount">0</span> / <span class="TDFriendSelector_selectedCountMax">0</span> friends selected</div>
+                                <input type="text" placeholder="Search friends" id="TDFriendSelector_searchField" />
+                            </div>
+                            <div class="TDFriendSelector_friendsContainer"></div>
+                        </div>
+                        <div class="TDFriendSelector_footer TDFriendSelector_clearfix">
+                            <a href="#" id="TDFriendSelector_pagePrev" class="TDFriendSelector_disabled">Previous</a>
+                            <a href="#" id="TDFriendSelector_pageNext">Next</a>
+                            <div class="TDFriendSelector_pageNumberContainer">
+                                Page <span id="TDFriendSelector_pageNumber">1</span> / <span id="TDFriendSelector_pageNumberTotal">1</span>
+                            </div>
+                            <a href="#" id="TDFriendSelector_buttonOK">OK</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="gift_list">
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<div id="hub">
+    <!--<h1>Please install Adobe&apos;s Flash Plug-In...</h1>
+    <p>
+        <a href='http://www.adobe.com/go/getflashplayer'><img src='<?php echo $cdn ?>/assets/fb/get_flash_player.gif' alt='Get Adobe Flash player' /> </a>
+    </p>-->
+</div>
+
+
+<div id="footer">
+    <div id="scanner">
+        <a target="_top" href="/hub/download/<?php echo $data['user_id'] ?>">
+            <img src="<?php echo $cdn ?>/assets/fb/ScannerBanner01_ref.png" alt="Download the Scanner to unlock music!" />
+        </a>
+    </div>
+    <div id="like">
+        <fb:like href="https://developers.facebook.com/docs/plugins/like-button" layout="standard" action="like" show_faces="true" share="true"></fb:like>
+    </div>
+</div>
+
+
+<div id="scanner_dev" class="box">
+    <span class="smallish admin">
+        <div class="buildinfo" id="buildinfo"></div>
+        <a target="_blank" class="boxlink" href="https://clickr0.droolpot.com/debug/auth/token/<?php echo $data['user_id'] ?>">AUTH TOKEN</a> | 
+        <a class="boxlink" href="https://clickr0.droolpot.com/debug/player/reset/<?php echo $data['user_id'] ?>">RESET PLAYER</a> | 
+        <a target="_blank" class="boxlink" onClick="buyTickets('1928558756');">BUY TICKETS</a> | 
+        <a target="_blank" class="boxlink" onClick="shareFB();">SHARE</a> | 
+        <a target="_blank" class="boxlink" onClick="indexInvite();">INVITE</a> | 
+        <a class="boxlink" onClick="gifts();">GIFTS: <span id="giftcount">...</span></a>
+    </span>
+</div>
+<?php
+}
+main ($this);
+?>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-47310144-1', 'facebook.com');
+  ga('send', 'pageview');
+</script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+ <head prefix=
+    "og: http://ogp.me/ns#
+     fb: http://ogp.me/ns/fb# 
+     product: http://ogp.me/ns/product#">
+    <meta property="og:type"                   content="og:product" />
+    <meta property="og:title"                  content="<?php echo $this->pack->values['title'] ?>" />
+    <meta property="og:plural_title"           content="<?php echo $this->pack->values['plural_title'] ?>" />
+    <meta property="og:image"                  content="<?php echo $this->app->config->web('cdn') . $this->pack->values['image'] ?>" />
+    <meta property="og:description"            content="<?php echo $this->pack->values['description'] ?>" />
+    <meta property="og:url"                    content="<?php echo $this->app->config->api('url') ?>/hub/tickets/<?php echo $this->pack->values['id'] ?>" />
+    <meta property="product:price:amount"      content="<?php echo $this->pack->values['amount'] ?>"/>
+    <meta property="product:price:currency"    content="<?php echo $this->pack->values['currency'] ?>"/>
+  </head>
+</html>

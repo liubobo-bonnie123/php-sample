@@ -1,0 +1,48 @@
+<?php
+$cdn = $this->app->config->web('cdn');
+?>
+<html>
+<head>
+<title><?php echo htmlentities ($this->title) ?></title>
+<link rel="stylesheet" type="text/css" href="<?php echo $cdn ?>/css/qtip/jquery.qtip.min.css">
+<link rel="stylesheet" type="text/css" href="<?php echo $cdn ?>/css/music_report.css">
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.js"></script>
+<script type="text/javascript" src="<?php echo $cdn ?>/js/qtip2/jquery.qtip.min.js"></script>
+<style>
+body 
+{ 
+    background-color: #fff; 
+    color: #000; 
+    font-family: sans-serif;
+    font-size: 90%; 
+}
+</style>
+</head>
+<body>
+<?php echo $this->output; ?>
+</body>
+<script>
+$( document ).ready
+(
+    function() 
+    {
+        $('img').each
+        (
+            function() 
+            {
+                console.log ($(this).attr('title'));
+                $(this).qtip
+                (
+                    {
+                        content: 
+                        {
+                            text: $("#" + $(this).attr('title'))
+                        }
+                    }
+                );
+            }
+        );
+    }
+);
+</script>
+</html>
